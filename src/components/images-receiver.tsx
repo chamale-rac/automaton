@@ -31,7 +31,7 @@ interface ImageTransformed {
 	title: string
 }
 
-export const Receiver: React.FC = () => {
+export const ImagesReceiver: React.FC = () => {
 	const [index, setIndex] = useState(-1)
 	const [photos, setPhotos] = useState<ImageTransformed[]>([])
 	const snap = useSnapshot(expressionFormProxy)
@@ -70,8 +70,10 @@ export const Receiver: React.FC = () => {
 				layout="rows"
 				targetRowHeight={150}
 				onClick={({ index }) => setIndex(index)}
+				rowConstraints={{
+					maxPhotos: 2,
+				}}
 			/>
-
 			<Lightbox
 				slides={photos}
 				open={index >= 0}

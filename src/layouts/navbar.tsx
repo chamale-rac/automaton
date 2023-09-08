@@ -4,7 +4,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export function NavBar() {
 	return (
-		<div className={'flex items-center justify-between w-full p-4'}>
+		<div
+			className={
+				'flex items-center justify-between w-full py-3 px-56 border-b border-solid'
+			}
+		>
 			<div className={'flex items-center justify-normal'}>
 				<Avatar className={'mx-3'}>
 					<AvatarImage

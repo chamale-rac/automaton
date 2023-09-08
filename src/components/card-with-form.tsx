@@ -11,7 +11,7 @@ export function CardWithForm() {
 	return (
 		<Card className="w-[350px]">
 			<CardHeader>
-				<CardTitle>Create graphs</CardTitle>
+				<CardTitle>1. Define an expression</CardTitle>
 				<CardDescription>
 					Build AST, NFA and DFA in one click.
 				</CardDescription>
