@@ -11,8 +11,8 @@ export function NavBar() {
 		>
 			<div className={'flex items-center justify-normal'}>
 				<Avatar className={'mx-3'}>
-					<AvatarImage
-						src="https://github.com/chamale-rac.png"
+					<AvatarImage 
+						src="/1.svg"
 						alt="@chamale-rac"
 					/>
 					<AvatarFallback>CR</AvatarFallback>
