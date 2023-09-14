@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { expressionFormProxy } from '@/config/proxies'
+import { useToast } from '@/components/ui/use-toast'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -35,9 +36,16 @@ interface Image {
 	description: string
 }
 
+interface Table {
+	title: string
+	head: string[]
+	body: string[][]
+}
+
 interface responseData {
 	expression: string
 	images: Image[]
+	tables: Table[]
 }
 
 interface postData {
@@ -45,6 +53,8 @@ interface postData {
 }
 
 export function ExpressionForm() {
+	const { toast } = useToast()
+
 	const postExpression = async (expression: string) => {
 		try {
 			const postData: postData = {
@@ -58,8 +68,9 @@ export function ExpressionForm() {
 				body: JSON.stringify(postData),
 			})
 			const responseData: responseData = await response.json()
-			console.log(responseData)
+
 			expressionFormProxy.images = responseData.images
+			expressionFormProxy.tables = responseData.tables
 		} catch (e) {
 			console.log(e)
 		}
@@ -76,21 +87,26 @@ export function ExpressionForm() {
 	// Define a submit handler.
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		postExpression(values.expression)
-		console.log(values)
+		toast({
+			description: 'Your expression has been sent.',
+		})
 	}
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className='space-y-8'
+			>
 				<FormField
 					control={form.control}
-					name="expression"
+					name='expression'
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Expression</FormLabel>
 							<FormControl>
 								<Input
-									placeholder="Your expression"
+									placeholder='Your expression'
 									{...field}
 								/>
 							</FormControl>
@@ -101,7 +117,7 @@ export function ExpressionForm() {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit">Generate</Button>
+				<Button type='submit'>Generate</Button>
 			</form>
 		</Form>
 	)
