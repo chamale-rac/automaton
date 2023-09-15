@@ -14,7 +14,8 @@ export function Results() {
 				<CardHeader>
 					<CardTitle>2. Check the results</CardTitle>
 					<CardDescription>
-						Here you can found the resultant graphs.
+						Here you can found the resultant graphs. Click to see on full
+						screen.
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
