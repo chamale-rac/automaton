@@ -6,14 +6,14 @@ export function NavBar() {
 	return (
 		<div
 			className={
-				'flex items-center justify-between w-full py-3 px-56 border-b border-solid'
+				'flex items-center justify-between w-full py-3 xl:px-56 md:px-4 border-b border-solid'
 			}
 		>
 			<div className={'flex items-center justify-normal'}>
 				<Avatar className={'mx-3'}>
-					<AvatarImage 
-						src="/1.svg"
-						alt="@chamale-rac"
+					<AvatarImage
+						src='/1.svg'
+						alt='@chamale-rac'
 					/>
 					<AvatarFallback>CR</AvatarFallback>
 				</Avatar>

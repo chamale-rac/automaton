@@ -9,12 +9,20 @@ interface Image {
 	description: string
 }
 
+interface Table {
+	title: string
+	head: string[]
+	body: string[][]
+}
+
 interface ExpressionFormProxy {
 	abstractSyntaxTree: string
 	images: Image[]
+	tables: Table[]
 }
 
 export const expressionFormProxy = proxy<ExpressionFormProxy>({
 	abstractSyntaxTree: '',
 	images: [],
+	tables: [],
 })
