@@ -8,7 +8,6 @@ import 'yet-another-react-lightbox/styles.css'
 
 import Lightbox from 'yet-another-react-lightbox'
 import Captions from 'yet-another-react-lightbox/plugins/captions'
-import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen'
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import Download from 'yet-another-react-lightbox/plugins/download'
@@ -46,9 +45,7 @@ export const ImagesReceiver: React.FC = () => {
 				width,
 				height,
 				srcSet: breakpoints.map((breakpoint) => {
-					const breakpointHeight = Math.round(
-						(height / width) * breakpoint,
-					)
+					const breakpointHeight = Math.round((height / width) * breakpoint)
 					return {
 						src: photo.src,
 						width: breakpoint,
@@ -67,7 +64,7 @@ export const ImagesReceiver: React.FC = () => {
 		<>
 			<PhotoAlbum
 				photos={photos}
-				layout="rows"
+				layout='rows'
 				targetRowHeight={150}
 				onClick={({ index }) => setIndex(index)}
 				rowConstraints={{
@@ -80,7 +77,7 @@ export const ImagesReceiver: React.FC = () => {
 				index={index}
 				close={() => setIndex(-1)}
 				// enable optional lightbox plugins
-				plugins={[Captions, Fullscreen, Thumbnails, Zoom, Download]}
+				plugins={[Captions, Thumbnails, Zoom, Download]}
 				thumbnails={{
 					imageFit: 'cover',
 					showToggle: true,

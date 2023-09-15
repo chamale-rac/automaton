@@ -23,16 +23,16 @@ export function TableCustom({
 			<Table>
 				<TableHeader>
 					<TableRow>
-						{head.map((head) => (
-							<TableHead key={head}>{head}</TableHead>
+						{head.map((head, index) => (
+							<TableHead key={index}>{head}</TableHead>
 						))}
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{body.map((row) => (
-						<TableRow key={row[0]}>
-							{row.map((cell) => (
-								<TableCell key={cell}>{cell}</TableCell>
+					{body.map((row, rowIndex) => (
+						<TableRow key={rowIndex}>
+							{row.map((cell, cellIndex) => (
+								<TableCell key={rowIndex + cellIndex}>{cell}</TableCell>
 							))}
 						</TableRow>
 					))}

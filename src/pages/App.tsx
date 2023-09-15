@@ -1,8 +1,8 @@
 import { ThemeProvider } from '@/components/theme-provider'
 import { Results } from '@/layouts/results'
-import { Tables } from './layouts/tables'
+import { Tables } from '../layouts/tables'
 import { NavBar } from '@/layouts/navbar'
-import { CardWithForm } from './components/card-with-form'
+import { CardWithForm } from '../components/card-with-form'
 import { Toaster } from '@/components/ui/toaster'
 
 function App() {
