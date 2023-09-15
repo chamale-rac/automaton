@@ -89,7 +89,7 @@ export function ExpressionForm() {
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		postExpression(values.expression)
 		toast({
-			description: 'Your expression has been sent.',
+			description: 'Working on your expression.',
 		})
 	}
 
@@ -115,6 +115,11 @@ export function ExpressionForm() {
 			postExpression(decodedExpression)
 			form.setValue('expression', decodedExpression)
 		}
+		setTimeout(() => {
+			toast({
+				description: 'Working on the retrieved expression.',
+			})
+		}, 1000)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
