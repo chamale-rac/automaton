@@ -9,19 +9,18 @@ export function NavBar() {
 				'flex items-center justify-between w-full py-3 xl:px-56 md:px-4 border-b border-solid'
 			}
 		>
-			<a
-				href='/'
-				className={'flex items-center justify-normal cursor-pointer'}
-			>
-				<Avatar className={'mx-3'}>
-					<AvatarImage
-						src='/1.svg'
-						alt='iAutomaton'
-					/>
-					<AvatarFallback>CR</AvatarFallback>
-				</Avatar>
+			<div className={'flex items-center justify-normal cursor-pointer'}>
+				<a href='/'>
+					<Avatar className={'mx-3'}>
+						<AvatarImage
+							src='/1.svg'
+							alt='iAutomaton'
+						/>
+						<AvatarFallback>CR</AvatarFallback>
+					</Avatar>
+				</a>
 				<NavigationBar />
-			</a>
+			</div>
 			<ModeToggle />
 		</div>
 	)
