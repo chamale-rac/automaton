@@ -103,7 +103,7 @@ export function ExpressionForm() {
 		navigator.clipboard.writeText(url.toString())
 
 		toast({
-			description: 'Url copied to clipboard.',
+			description: 'URL copied to clipboard.',
 		})
 	}
 
