@@ -10,7 +10,7 @@ import { ExpressionForm } from '@/components/form'
 export function CardWithForm() {
 	return (
 		<div className={'flex items-center justify-start w-full px-8 mt-8'}>
-			<Card className="w-[350px]">
+			<Card className='w-[350px]'>
 				<CardHeader>
 					<CardTitle>1. Define an expression</CardTitle>
 					<CardDescription>
@@ -20,7 +20,7 @@ export function CardWithForm() {
 				<CardContent>
 					<ExpressionForm />
 				</CardContent>
-			</Card>			
+			</Card>
 		</div>
 	)
 }

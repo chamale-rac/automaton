@@ -15,6 +15,7 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useEffect } from 'react'
 
 const formSchema = z.object({
 	expression: z
@@ -92,6 +93,28 @@ export function ExpressionForm() {
 		})
 	}
 
+	function onShare(values: z.infer<typeof formSchema>) {
+		// Copy the actual url to clipboard, attaching a query param with the expression in a base64 format.
+		const url = new URL(window.location.href)
+		url.searchParams.set('expression', btoa(values.expression))
+		navigator.clipboard.writeText(url.toString())
+
+		toast({
+			description: 'Url copied to clipboard.',
+		})
+	}
+
+	useEffect(() => {
+		const url = new URL(window.location.href)
+		const expression = url.searchParams.get('expression')
+		if (expression) {
+			const decodedExpression = atob(expression)
+			postExpression(decodedExpression)
+			form.setValue('expression', decodedExpression)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
 	return (
 		<Form {...form}>
 			<form
@@ -111,13 +134,22 @@ export function ExpressionForm() {
 								/>
 							</FormControl>
 							<FormDescription>
-								This will be the evaluated expression.
+								This will be the evaluated expression. Use ϵ
 							</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-				<Button type='submit'>Generate</Button>
+				<div className='flex justify-between'>
+					<Button type='submit'>Generate</Button>
+					<Button
+						variant='outline'
+						type='button'
+						onClick={form.handleSubmit(onShare)}
+					>
+						Share
+					</Button>
+				</div>
 			</form>
 		</Form>
 	)
