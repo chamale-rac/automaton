@@ -96,7 +96,10 @@ export function ExpressionForm() {
 	function onShare(values: z.infer<typeof formSchema>) {
 		// Copy the actual url to clipboard, attaching a query param with the expression in a base64 format.
 		const url = new URL(window.location.href)
-		url.searchParams.set('expression', btoa(values.expression))
+		url.searchParams.set(
+			'expression',
+			btoa(encodeURIComponent(values.expression))
+		)
 		navigator.clipboard.writeText(url.toString())
 
 		toast({
@@ -108,7 +111,7 @@ export function ExpressionForm() {
 		const url = new URL(window.location.href)
 		const expression = url.searchParams.get('expression')
 		if (expression) {
-			const decodedExpression = atob(expression)
+			const decodedExpression = decodeURIComponent(atob(expression))
 			postExpression(decodedExpression)
 			form.setValue('expression', decodedExpression)
 		}
