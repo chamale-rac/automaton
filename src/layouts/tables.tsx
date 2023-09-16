@@ -19,17 +19,23 @@ interface Table {
 
 export function Tables() {
 	const [tables, setTables] = useState<Table[]>([])
-	const snap = useSnapshot(expressionFormProxy)
+	const expressionFormProxySnap = useSnapshot(expressionFormProxy)
 
 	useEffect(() => {
-		setTables(Array.from(snap.tables) as Table[])
-	}, [snap.tables])
+		setTables(Array.from(expressionFormProxySnap.tables) as Table[])
+	}, [expressionFormProxySnap.tables])
 
 	return (
 		<div className={'flex items-center justify-start w-full px-8 mt-8'}>
 			<Card className={'w-full'}>
 				<CardHeader>
-					<CardTitle>3. Related tables</CardTitle>
+					<CardTitle className='flex justify-between'>
+						3. Related tables
+						<span className='text-muted-foreground text-base'>
+							{'Using: '}
+							{expressionFormProxySnap.expression}
+						</span>
+					</CardTitle>
 					<CardDescription>
 						Here you can found tables used to generate the graph.
 					</CardDescription>

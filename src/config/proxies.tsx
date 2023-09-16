@@ -16,13 +16,21 @@ interface Table {
 }
 
 interface ExpressionFormProxy {
-	abstractSyntaxTree: string
+	expression: string
 	images: Image[]
 	tables: Table[]
 }
 
 export const expressionFormProxy = proxy<ExpressionFormProxy>({
-	abstractSyntaxTree: '',
+	expression: '',
 	images: [],
 	tables: [],
+})
+
+export const interactionProxy = proxy({
+	firstTimeRetrieveURL: true,
+})
+
+export const saveProxy = proxy({
+	graphExpressionInput: '',
 })

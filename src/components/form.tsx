@@ -1,9 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { ExternalLink } from 'lucide-react'
 import * as z from 'zod'
-import { expressionFormProxy } from '@/config/proxies'
+import {
+	expressionFormProxy,
+	interactionProxy,
+	saveProxy,
+} from '@/config/proxies'
 import { useToast } from '@/components/ui/use-toast'
-
+import { ToastAction } from '@/components/ui/toast'
+import { useSnapshot } from 'valtio'
 import { Button } from '@/components/ui/button'
 import {
 	Form,
@@ -54,6 +60,8 @@ interface postData {
 }
 
 export function ExpressionForm() {
+	const interactionProxySnap = useSnapshot(interactionProxy)
+	const saveProxySnap = useSnapshot(saveProxy)
 	const { toast } = useToast()
 
 	const postExpression = async (expression: string) => {
@@ -70,6 +78,7 @@ export function ExpressionForm() {
 			})
 			const responseData: responseData = await response.json()
 
+			expressionFormProxy.expression = responseData.expression
 			expressionFormProxy.images = responseData.images
 			expressionFormProxy.tables = responseData.tables
 		} catch (e) {
@@ -81,7 +90,7 @@ export function ExpressionForm() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			expression: '',
+			expression: saveProxySnap.graphExpressionInput,
 		},
 	})
 
@@ -104,24 +113,43 @@ export function ExpressionForm() {
 
 		toast({
 			description: 'URL copied to clipboard.',
+			action: (
+				<ToastAction
+					altText='Goto copied url'
+					// onClick redirect to copied url
+					onClick={() => {
+						window.open(url.toString(), '_blank')
+					}}
+				>
+					<ExternalLink
+						className='relative top-[1px] h-4 w-3 transition duration-200'
+						aria-hidden='true'
+					/>
+				</ToastAction>
+			),
 		})
 	}
 
 	useEffect(() => {
 		const url = new URL(window.location.href)
 		const expression = url.searchParams.get('expression')
-		if (expression) {
+		if (expression && interactionProxySnap.firstTimeRetrieveURL) {
 			const decodedExpression = decodeURIComponent(atob(expression))
 			postExpression(decodedExpression)
 			form.setValue('expression', decodedExpression)
+			interactionProxy.firstTimeRetrieveURL = false
+			setTimeout(() => {
+				toast({
+					description: 'Working on the retrieved expression.',
+				})
+			}, 1000)
 		}
-		setTimeout(() => {
-			toast({
-				description: 'Working on the retrieved expression.',
-			})
-		}, 1000)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
+	useEffect(() => {
+		saveProxy.graphExpressionInput = form.watch('expression')
+	}, [form.watch('expression')])
 
 	return (
 		<Form {...form}>
