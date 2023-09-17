@@ -1,27 +1,35 @@
-# React + TypeScript + Vite
+# 🚀 automaton-server AKA Proyecto 1
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+You can effortlessly generate graphs from regular expressions, including Abstract Syntax Tree, Non-deterministic Finite Automaton, Deterministic Finite Automaton, and Minimized Finite Automaton. Additionally, iAutomaton enables you to simulate these automata with various input strings.
 
-Currently, two official plugins are available:
+This interface works directly with [automaton-server (repository)](https://github.com/chamale-rac/automaton-server).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📑 Index
 
-## Expanding the ESLint configuration
+- [🌐 How to use it?](#how-to-use-it)
+- [🤔 Why I code this?](#why-i-code-this)
+- [🧐 Who I am?](#who-i-am)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## How to use it?
 
-- Configure the top-level `parserOptions` property like this:
+This project uses react, typescript and vite. To run it simply use:
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+```bash
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+```bash
+npm run dev
+```
+
+⚠️ Don't forget to configure the **.env** file with the server URL.
+
+## Why I code this?
+
+Es un agregado al **Proyecto No. 1** de **Teoría de la Computación** **Sección 20** del **Segundo ciclo 2023**. Valía puntos, fuí coaccionado 😭.
+
+## Who I am?
+
+[Samuel A. Chamalé](https://github.com/chamale-rac) - Human
+
+Guatemala, 2023
