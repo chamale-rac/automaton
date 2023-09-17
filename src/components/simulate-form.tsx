@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { ExternalLink } from 'lucide-react'
 import * as z from 'zod'
 import {
-	expressionFormProxy,
+	SimulateFormProxy,
 	interactionProxy,
 	saveProxy,
 } from '@/config/proxies'
@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useEffect } from 'react'
+import { Textarea } from '@/components/ui/textarea'
 
 const formSchema = z.object({
 	expression: z
@@ -32,16 +33,10 @@ const formSchema = z.object({
 		.max(50, {
 			message: 'Expression must be at most 50 characters.',
 		}),
+	strings: z.string().min(1, {
+		message: 'Strings must be at least 1 characters.',
+	}),
 })
-
-interface Image {
-	src: string
-	alt: string
-	width: number
-	height: number
-	title: string
-	description: string
-}
 
 interface Table {
 	title: string
@@ -51,37 +46,47 @@ interface Table {
 
 interface responseData {
 	expression: string
-	images: Image[]
 	tables: Table[]
 }
 
 interface postData {
 	expression: string
+	strings: string[]
 }
 
-export function ExpressionForm() {
+export function SimulateForm() {
 	const interactionProxySnap = useSnapshot(interactionProxy)
 	const saveProxySnap = useSnapshot(saveProxy)
 	const { toast } = useToast()
 
-	const postExpression = async (expression: string) => {
+	const postExpression = async (expression: string, strings: string[]) => {
 		try {
 			const postData: postData = {
 				expression: expression,
+				strings: strings,
 			}
-			const response = await fetch(import.meta.env.VITE_SERVER_BASE_URL, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(postData),
-			})
+			const response = await fetch(
+				`${import.meta.env.VITE_SERVER_BASE_URL}/simulation`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(postData),
+				}
+			)
 			const responseData: responseData = await response.json()
 
-			expressionFormProxy.expression = responseData.expression
-			expressionFormProxy.images = responseData.images
-			expressionFormProxy.tables = responseData.tables
+			SimulateFormProxy.expression = responseData.expression
+			SimulateFormProxy.tables = responseData.tables
+			console.log(responseData)
+			toast({
+				description: 'Work done! Check the results.',
+			})
 		} catch (e) {
+			toast({
+				description: 'Something went wrong.',
+			})
 			console.log(e)
 		}
 	}
@@ -90,13 +95,15 @@ export function ExpressionForm() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			expression: saveProxySnap.graphExpressionInput,
+			expression: saveProxySnap.simulateExpressionInput,
+			strings: saveProxySnap.simulateStringsInput,
 		},
 	})
 
 	// Define a submit handler.
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		postExpression(values.expression)
+		const splitByNewLine = values.strings.split('\n')
+		postExpression(values.expression, splitByNewLine)
 		toast({
 			description: 'Working on your expression.',
 		})
@@ -135,21 +142,27 @@ export function ExpressionForm() {
 		const expression = url.searchParams.get('expression')
 		if (expression && interactionProxySnap.firstTimeRetrieveURL) {
 			const decodedExpression = decodeURIComponent(atob(expression))
-			postExpression(decodedExpression)
+			postExpression(decodedExpression, ['a', 'b', 'c'])
 			form.setValue('expression', decodedExpression)
 			interactionProxy.firstTimeRetrieveURL = false
 			setTimeout(() => {
 				toast({
 					description: 'Working on the retrieved expression.',
 				})
-			}, 1000)
+			}, 100)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	useEffect(() => {
-		saveProxy.graphExpressionInput = form.watch('expression')
+		saveProxy.simulateExpressionInput = form.watch('expression')
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [form.watch('expression')])
+
+	useEffect(() => {
+		saveProxy.simulateStringsInput = form.watch('strings')
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [form.watch('strings')])
 
 	return (
 		<Form {...form}>
@@ -171,6 +184,25 @@ export function ExpressionForm() {
 							</FormControl>
 							<FormDescription>
 								This will be the evaluated expression. Use ϵ
+							</FormDescription>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name='strings'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Strings</FormLabel>
+							<FormControl>
+								<Textarea
+									placeholder='Type your test strings here.'
+									{...field}
+								/>
+							</FormControl>
+							<FormDescription>
+								Each string must be separated by a new line (enter).
 							</FormDescription>
 							<FormMessage />
 						</FormItem>

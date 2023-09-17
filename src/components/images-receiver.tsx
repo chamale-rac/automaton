@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSnapshot } from 'valtio'
-import { expressionFormProxy } from '@/config/proxies'
+import { GraphsFormProxy } from '@/config/proxies'
 
 import PhotoAlbum from 'react-photo-album'
 
@@ -33,7 +33,7 @@ interface ImageTransformed {
 export const ImagesReceiver: React.FC = () => {
 	const [index, setIndex] = useState(-1)
 	const [photos, setPhotos] = useState<ImageTransformed[]>([])
-	const snap = useSnapshot(expressionFormProxy)
+	const snap = useSnapshot(GraphsFormProxy)
 
 	useEffect(() => {
 		const transformedImages = snap.images.map((photo) => {

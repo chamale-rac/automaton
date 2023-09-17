@@ -6,11 +6,11 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import { expressionFormProxy } from '@/config/proxies'
+import { GraphsFormProxy } from '@/config/proxies'
 import { useSnapshot } from 'valtio'
 
 export function Results() {
-	const expressionFormProxySnap = useSnapshot(expressionFormProxy)
+	const GraphsFormProxySnap = useSnapshot(GraphsFormProxy)
 	return (
 		<div className={'flex items-center justify-start w-full px-8 mt-8'}>
 			<Card className={'w-full'}>
@@ -19,7 +19,7 @@ export function Results() {
 						2. Check the results
 						<span className='text-muted-foreground text-base'>
 							{'Using: '}
-							{expressionFormProxySnap.expression}
+							{GraphsFormProxySnap.expression}
 						</span>
 					</CardTitle>
 					<CardDescription>

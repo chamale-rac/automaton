@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { proxy } from 'valtio'
 
 interface Image {
@@ -15,15 +16,25 @@ interface Table {
 	body: string[][]
 }
 
-interface ExpressionFormProxy {
+interface GraphsFormProxy {
 	expression: string
 	images: Image[]
 	tables: Table[]
 }
 
-export const expressionFormProxy = proxy<ExpressionFormProxy>({
+interface SimulateFormProxy {
+	expression: string
+	tables: Table[]
+}
+
+export const GraphsFormProxy = proxy<GraphsFormProxy>({
 	expression: '',
 	images: [],
+	tables: [],
+})
+
+export const SimulateFormProxy = proxy<SimulateFormProxy>({
+	expression: '',
 	tables: [],
 })
 
@@ -33,4 +44,6 @@ export const interactionProxy = proxy({
 
 export const saveProxy = proxy({
 	graphExpressionInput: '',
+	simulateExpressionInput: '',
+	simulateStringsInput: '',
 })
