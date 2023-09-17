@@ -1,6 +1,7 @@
 import { ModeToggle } from '@/components/mode-toggle'
 import { NavigationBar } from '@/components/navigation-bar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Link } from 'react-router-dom'
 
 export function NavBar() {
 	return (
@@ -10,7 +11,7 @@ export function NavBar() {
 			}
 		>
 			<div className={'flex items-center justify-normal cursor-pointer'}>
-				<a href='/'>
+				<Link to='/'>
 					<Avatar className={'mx-3'}>
 						<AvatarImage
 							src='/1.svg'
@@ -18,7 +19,7 @@ export function NavBar() {
 						/>
 						<AvatarFallback>CR</AvatarFallback>
 					</Avatar>
-				</a>
+				</Link>
 				<NavigationBar />
 			</div>
 			<ModeToggle />

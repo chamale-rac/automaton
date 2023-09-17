@@ -1,9 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { ExternalLink } from 'lucide-react'
 import * as z from 'zod'
-import { expressionFormProxy } from '@/config/proxies'
+import { GraphsFormProxy, interactionProxy, saveProxy } from '@/config/proxies'
 import { useToast } from '@/components/ui/use-toast'
-
+import { ToastAction } from '@/components/ui/toast'
+import { useSnapshot } from 'valtio'
 import { Button } from '@/components/ui/button'
 import {
 	Form,
@@ -53,7 +55,9 @@ interface postData {
 	expression: string
 }
 
-export function ExpressionForm() {
+export function GraphsForm() {
+	const interactionProxySnap = useSnapshot(interactionProxy)
+	const saveProxySnap = useSnapshot(saveProxy)
 	const { toast } = useToast()
 
 	const postExpression = async (expression: string) => {
@@ -61,18 +65,30 @@ export function ExpressionForm() {
 			const postData: postData = {
 				expression: expression,
 			}
-			const response = await fetch(import.meta.env.VITE_SERVER_BASE_URL, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(postData),
-			})
+			const response = await fetch(
+				`${import.meta.env.VITE_SERVER_BASE_URL}/graphs`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(postData),
+				}
+			)
 			const responseData: responseData = await response.json()
 
-			expressionFormProxy.images = responseData.images
-			expressionFormProxy.tables = responseData.tables
+			GraphsFormProxy.expression = responseData.expression
+			GraphsFormProxy.images = responseData.images
+			GraphsFormProxy.tables = responseData.tables
+			toast({
+				title: 'Graphs',
+				description: 'Work done! Check the results.',
+			})
 		} catch (e) {
+			toast({
+				title: 'Graphs',
+				description: 'Something went wrong.',
+			})
 			console.log(e)
 		}
 	}
@@ -81,7 +97,7 @@ export function ExpressionForm() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			expression: '',
+			expression: saveProxySnap.graphExpressionInput,
 		},
 	})
 
@@ -89,6 +105,7 @@ export function ExpressionForm() {
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		postExpression(values.expression)
 		toast({
+			title: 'Graphs',
 			description: 'Working on your expression.',
 		})
 	}
@@ -96,6 +113,7 @@ export function ExpressionForm() {
 	function onShare(values: z.infer<typeof formSchema>) {
 		// Copy the actual url to clipboard, attaching a query param with the expression in a base64 format.
 		const url = new URL(window.location.href)
+		url.searchParams.set('tab', 'graphs')
 		url.searchParams.set(
 			'expression',
 			btoa(encodeURIComponent(values.expression))
@@ -103,25 +121,52 @@ export function ExpressionForm() {
 		navigator.clipboard.writeText(url.toString())
 
 		toast({
+			title: 'Graphs',
 			description: 'URL copied to clipboard.',
+			action: (
+				<ToastAction
+					altText='Goto copied url'
+					// onClick redirect to copied url
+					onClick={() => {
+						window.open(url.toString(), '_blank')
+					}}
+				>
+					<ExternalLink
+						className='relative top-[1px] h-4 w-3 transition duration-200'
+						aria-hidden='true'
+					/>
+				</ToastAction>
+			),
 		})
 	}
 
 	useEffect(() => {
 		const url = new URL(window.location.href)
 		const expression = url.searchParams.get('expression')
-		if (expression) {
+		const tab = url.searchParams.get('tab')
+		if (
+			expression &&
+			interactionProxySnap.firstTimeRetrieveURL &&
+			tab === 'graphs'
+		) {
 			const decodedExpression = decodeURIComponent(atob(expression))
 			postExpression(decodedExpression)
 			form.setValue('expression', decodedExpression)
+			interactionProxy.firstTimeRetrieveURL = false
+			setTimeout(() => {
+				toast({
+					title: 'Graphs',
+					description: 'Working on the retrieved expression.',
+				})
+			}, 10)
 		}
-		setTimeout(() => {
-			toast({
-				description: 'Working on the retrieved expression.',
-			})
-		}, 1000)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
+	useEffect(() => {
+		saveProxy.graphExpressionInput = form.watch('expression')
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [form.watch('expression')])
 
 	return (
 		<Form {...form}>

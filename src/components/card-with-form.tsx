@@ -5,21 +5,24 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import { ExpressionForm } from '@/components/form'
 
-export function CardWithForm() {
+export function CardWithForm({
+	children,
+	title,
+	description,
+}: {
+	children?: React.ReactNode
+	title?: string
+	description?: string
+}) {
 	return (
 		<div className={'flex items-center justify-start w-full px-8 mt-8'}>
-			<Card className='w-[350px]'>
+			<Card className='w-[350px] xl:w-[650px]'>
 				<CardHeader>
-					<CardTitle>1. Define an expression</CardTitle>
-					<CardDescription>
-						Build AST, NFA and DFA in one click.
-					</CardDescription>
+					<CardTitle>{title}</CardTitle>
+					<CardDescription>{description}</CardDescription>
 				</CardHeader>
-				<CardContent>
-					<ExpressionForm />
-				</CardContent>
+				<CardContent>{children}</CardContent>
 			</Card>
 		</div>
 	)

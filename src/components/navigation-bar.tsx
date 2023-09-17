@@ -12,12 +12,15 @@ import {
 	NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
 
+const frontendRepo = 'automaton'
+const backendRepo = 'automaton-server'
+
 export function NavigationBar() {
 	return (
 		<NavigationMenu>
 			<NavigationMenuList>
 				<NavigationMenuItem>
-					<NavigationMenuTrigger>What's</NavigationMenuTrigger>
+					<NavigationMenuTrigger>About</NavigationMenuTrigger>
 					<NavigationMenuContent>
 						<ul className='grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
 							<li className='row-span-3'>
@@ -34,17 +37,40 @@ export function NavigationBar() {
 								</NavigationMenuLink>
 							</li>
 							<ListItem
-								href='/docs'
-								title='Docs'
+								href={`https://github.com/chamale-rac/${frontendRepo}`}
+								target='_blank'
+								title={`${frontendRepo} (client)`}
 							>
-								How to use it and what it does.
+								UI and UX.
+								<div className='flex flex-wrap gap-2 mt-1'>
+									<img
+										src={`https://img.shields.io/github/contributors/chamale-rac/${frontendRepo}.svg?maxAge=2592000`}
+									/>
+									<img
+										src={`https://img.shields.io/github/issues/chamale-rac/${frontendRepo}.svg?maxAge=2592000`}
+									/>
+									{/* <img
+										src={`https://img.shields.io/github/stars/chamale-rac/${frontendRepo}.svg?style=social&label=Star&maxAge=2592000`}
+									/> */}
+								</div>
 							</ListItem>
 							<ListItem
-								href='https://github.com/chamale-rac/automaton'
+								href={`https://github.com/chamale-rac/${backendRepo}`}
 								target='_blank'
-								title='Github'
+								title={`${backendRepo} (server)`}
 							>
-								Contribute to the project.
+								Algorithms and API.
+								<div className='flex flex-wrap gap-2 mt-1'>
+									<img
+										src={`https://img.shields.io/github/contributors/chamale-rac/${backendRepo}.svg?maxAge=2592000`}
+									/>
+									<img
+										src={`https://img.shields.io/github/issues/chamale-rac/${backendRepo}.svg?maxAge=2592000`}
+									/>
+									{/* <img
+										src={`https://img.shields.io/github/stars/chamale-rac/${backendRepo}.svg?style=social&label=Star&maxAge=2592000`}
+									/> */}
+								</div>
 							</ListItem>
 						</ul>
 					</NavigationMenuContent>
