@@ -116,7 +116,9 @@ export function Help() {
 								for using, and enjoy!
 								<br />
 								<br />
-								Sincerely, Samuel A. Chamalé - Human Developer Guatemala, 2023
+								Sincerely, Samuel A. Chamalé - Human
+								<br />
+								Guatemala, 2023
 							</AccordionContent>
 						</AccordionItem>
 						<AccordionItem value='item-2'>
