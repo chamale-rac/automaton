@@ -5,7 +5,7 @@ import { NavBar } from '@/layouts/navbar'
 import { CardWithForm } from '../components/card-with-form'
 import { Toaster } from '@/components/ui/toaster'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-
+import { Help } from '@/layouts/help'
 import { GraphsForm } from '@/components/graphs-form'
 import { SimulateForm } from '@/components/simulate-form'
 
@@ -68,7 +68,9 @@ function App() {
 						description='Here you can found whether the string is accepted or not.'
 					/>
 				</TabsContent>
-				<TabsContent value='help'>Help</TabsContent>
+				<TabsContent value='help'>
+					<Help />
+				</TabsContent>
 			</Tabs>
 			<Toaster />
 		</ThemeProvider>
