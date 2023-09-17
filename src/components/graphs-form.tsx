@@ -81,10 +81,12 @@ export function GraphsForm() {
 			GraphsFormProxy.images = responseData.images
 			GraphsFormProxy.tables = responseData.tables
 			toast({
+				title: 'Graphs',
 				description: 'Work done! Check the results.',
 			})
 		} catch (e) {
 			toast({
+				title: 'Graphs',
 				description: 'Something went wrong.',
 			})
 			console.log(e)
@@ -103,6 +105,7 @@ export function GraphsForm() {
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		postExpression(values.expression)
 		toast({
+			title: 'Graphs',
 			description: 'Working on your expression.',
 		})
 	}
@@ -110,6 +113,7 @@ export function GraphsForm() {
 	function onShare(values: z.infer<typeof formSchema>) {
 		// Copy the actual url to clipboard, attaching a query param with the expression in a base64 format.
 		const url = new URL(window.location.href)
+		url.searchParams.set('tab', 'graphs')
 		url.searchParams.set(
 			'expression',
 			btoa(encodeURIComponent(values.expression))
@@ -117,6 +121,7 @@ export function GraphsForm() {
 		navigator.clipboard.writeText(url.toString())
 
 		toast({
+			title: 'Graphs',
 			description: 'URL copied to clipboard.',
 			action: (
 				<ToastAction
@@ -138,16 +143,22 @@ export function GraphsForm() {
 	useEffect(() => {
 		const url = new URL(window.location.href)
 		const expression = url.searchParams.get('expression')
-		if (expression && interactionProxySnap.firstTimeRetrieveURL) {
+		const tab = url.searchParams.get('tab')
+		if (
+			expression &&
+			interactionProxySnap.firstTimeRetrieveURL &&
+			tab === 'graphs'
+		) {
 			const decodedExpression = decodeURIComponent(atob(expression))
 			postExpression(decodedExpression)
 			form.setValue('expression', decodedExpression)
 			interactionProxy.firstTimeRetrieveURL = false
 			setTimeout(() => {
 				toast({
+					title: 'Graphs',
 					description: 'Working on the retrieved expression.',
 				})
-			}, 100)
+			}, 10)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])

@@ -81,12 +81,11 @@ export function SimulateForm() {
 			SimulateFormProxy.tables = responseData.tables
 			console.log(responseData)
 			toast({
+				title: 'Simulation',
 				description: 'Work done! Check the results.',
 			})
 		} catch (e) {
-			toast({
-				description: 'Something went wrong.',
-			})
+			toast({ title: 'Simulation', description: 'Something went wrong.' })
 			console.log(e)
 		}
 	}
@@ -105,6 +104,7 @@ export function SimulateForm() {
 		const splitByNewLine = values.strings.split('\n')
 		postExpression(values.expression, splitByNewLine)
 		toast({
+			title: 'Simulation',
 			description: 'Working on your expression.',
 		})
 	}
@@ -112,13 +112,16 @@ export function SimulateForm() {
 	function onShare(values: z.infer<typeof formSchema>) {
 		// Copy the actual url to clipboard, attaching a query param with the expression in a base64 format.
 		const url = new URL(window.location.href)
+		url.searchParams.set('tab', 'simulation')
 		url.searchParams.set(
 			'expression',
 			btoa(encodeURIComponent(values.expression))
 		)
+		url.searchParams.set('strings', btoa(encodeURIComponent(values.strings)))
 		navigator.clipboard.writeText(url.toString())
 
 		toast({
+			title: 'Simulation',
 			description: 'URL copied to clipboard.',
 			action: (
 				<ToastAction
@@ -139,17 +142,30 @@ export function SimulateForm() {
 
 	useEffect(() => {
 		const url = new URL(window.location.href)
+
 		const expression = url.searchParams.get('expression')
-		if (expression && interactionProxySnap.firstTimeRetrieveURL) {
+		const strings = url.searchParams.get('strings')
+
+		const tab = url.searchParams.get('tab')
+		if (
+			strings &&
+			expression &&
+			interactionProxySnap.firstTimeRetrieveURL &&
+			tab === 'simulation'
+		) {
 			const decodedExpression = decodeURIComponent(atob(expression))
-			postExpression(decodedExpression, ['a', 'b', 'c'])
+			const decodedStrings = decodeURIComponent(atob(strings))
+
+			postExpression(decodedExpression, decodedStrings.split('\n'))
 			form.setValue('expression', decodedExpression)
+			form.setValue('strings', decodedStrings)
 			interactionProxy.firstTimeRetrieveURL = false
 			setTimeout(() => {
 				toast({
+					title: 'Simulation',
 					description: 'Working on the retrieved expression.',
 				})
-			}, 100)
+			}, 10)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
@@ -197,7 +213,7 @@ export function SimulateForm() {
 							<FormLabel>Strings</FormLabel>
 							<FormControl>
 								<Textarea
-									placeholder='Type your test strings here.'
+									placeholder='Type your test string here.'
 									{...field}
 								/>
 							</FormControl>
@@ -209,7 +225,7 @@ export function SimulateForm() {
 					)}
 				/>
 				<div className='flex justify-between'>
-					<Button type='submit'>Generate</Button>
+					<Button type='submit'>Simulate</Button>
 					<Button
 						variant='outline'
 						type='button'

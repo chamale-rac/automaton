@@ -21,6 +21,8 @@ interface Table {
 function App() {
 	const simulateSnap = useSnapshot(SimulateFormProxy)
 	const graphsSnap = useSnapshot(GraphsFormProxy)
+	const url = new URL(window.location.href)
+	const tab = url.searchParams.get('tab')
 
 	return (
 		<ThemeProvider
@@ -29,7 +31,7 @@ function App() {
 		>
 			<NavBar />
 			<Tabs
-				defaultValue='graphs'
+				defaultValue={tab || 'graphs'}
 				className='w-full flex flex-col mb-8'
 			>
 				<TabsList className='grid xl:w-[800px] grid-cols-3 mx-8 mt-8 self-center'>
@@ -62,8 +64,8 @@ function App() {
 					<Tables
 						tables={Array.from(simulateSnap.tables) as Table[]}
 						using={simulateSnap.expression}
-						title='3. Related tables'
-						description='Here you can found tables used to generate the graph.'
+						title='2. Check the results'
+						description='Here you can found whether the string is accepted or not.'
 					/>
 				</TabsContent>
 				<TabsContent value='help'>Help</TabsContent>
